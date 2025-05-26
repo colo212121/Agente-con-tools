@@ -1,4 +1,3 @@
-// Gestión de estudiantes
 import { readFileSync, writeFileSync } from 'fs';
 
 const DATA_FILE = './data/alumnos.json';
@@ -20,34 +19,41 @@ class Estudiantes {
   guardarEstudiantes() {
     try {
       writeFileSync(DATA_FILE, JSON.stringify({ alumnos: this.estudiantes }, null, 2));
-      this.cargarEstudiantesDesdeJson();
     } catch (e) {
       console.error("Error al guardar los estudiantes:", e);
       throw new Error("No se pudo guardar la lista de estudiantes.");
     }
   }
 
-  // Agrega un nuevo estudiante a la lista y guarda los cambios
   agregarEstudiante(nombre, apellido, curso) {
+    console.log("Intentando agregar estudiante:", { nombre, apellido, curso });
+
+    const existe = this.estudiantes.some(est => 
+      est.nombre.toLowerCase() === nombre.toLowerCase() &&
+      est.apellido.toLowerCase() === apellido.toLowerCase() &&
+      est.curso.toLowerCase() === curso.toLowerCase()
+    );
+
+    if (existe) {
+      throw new Error("El estudiante ya existe.");
+    }
+
     const nuevoEstudiante = { nombre, apellido, curso };
     this.estudiantes.push(nuevoEstudiante);
     this.guardarEstudiantes();
   }
 
-  // Busca estudiantes cuyo nombre coincida (case insensitive)
   buscarEstudiantePorNombre(nombre) {
     return this.estudiantes.filter(est => est.nombre.toLowerCase() === nombre.toLowerCase());
   }
 
-  // Busca estudiantes cuyo apellido coincida (case insensitive)
   buscarEstudiantePorApellido(apellido) {
     return this.estudiantes.filter(est => est.apellido.toLowerCase() === apellido.toLowerCase());
   }
 
-  // Devuelve la lista completa de estudiantes
   listarEstudiantes() {
     return this.estudiantes;
   }
 }
 
-export { Estudiantes }
+export { Estudiantes };
