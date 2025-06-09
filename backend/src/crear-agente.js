@@ -1,10 +1,7 @@
 import { tool, agent } from "llamaindex";
 import { Ollama } from "@llamaindex/ollama";
 import { z } from "zod";
-import { empezarChat } from "./lib/cli-chat.js";
-import { Estudiantes } from "./lib/estudiantes.js";
-
-const DEBUG = true;
+import { Estudiantes } from "../lib/estudiantes.js";
 
 const estudiantes = new Estudiantes();
 estudiantes.cargarEstudiantesDesdeJson();
@@ -84,21 +81,12 @@ const listarEstudiantesTool = tool({
     },
 });
 
-const elAgente = agent({
-    tools: [buscarPorNombreTool, buscarPorApellidoTool, agregarEstudianteTool, listarEstudiantesTool],
-    llm: ollamaLLM,
-    verbose: DEBUG,
-    systemPrompt: systemPrompt,
-});
-
-const mensajeBienvenida = `
-¡Hola! Soy tu asistente para gestionar estudiantes.
-Puedo ayudarte a:
-- Buscar estudiantes por nombre o apellido
-- Agregar nuevos estudiantes
-- Mostrar la lista completa de estudiantes
-
-¿Qué necesitás?
-`;
-
-empezarChat(elAgente, mensajeBienvenida);
+// SOLO exportá la función, no crees ni ejecutes el agente acá
+export function crearAgenteEstudiantes({ verbose = true } = {}) {
+    return agent({
+        tools: [buscarPorNombreTool, buscarPorApellidoTool, agregarEstudianteTool, listarEstudiantesTool],
+        llm: ollamaLLM,
+        verbose,
+        systemPrompt,
+    });
+}
