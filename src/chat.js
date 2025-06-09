@@ -6,7 +6,7 @@ export default function Chat({ mensajes, loading }) {
       {mensajes.map((msg, idx) => (
         <div key={idx} className={`self-${msg.rol === 'user' ? 'end' : 'start'}`}>
           <div className={`p-2 rounded-lg ${msg.rol === 'user' ? 'bg-blue-200' : 'bg-green-100'}`}>
-            <b>{msg.rol === 'user' ? 'Vos' : 'Asistente'}:</b> {msg.texto}
+            <b>{msg.rol === 'user' ? 'Vos' : 'Asistente'}:</b> {String(msg.texto)}
           </div>
         </div>
       ))}

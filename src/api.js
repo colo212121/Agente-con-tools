@@ -9,5 +9,13 @@ export async function enviarMensajeAlBackend(mensaje) {
     throw new Error(error.error || 'Error al comunicar con el backend');
   }
   const data = await res.json();
-  return data.response;
+  // Maneja ambos casos: string o objeto con .data
+  if (typeof data.response === "string") {
+    return data.response;
+  }
+  if (data.response && typeof data.response.data === "string") {
+    return data.response.data;
+  }
+  // Si no es ninguno, devuelve el objeto en string (debug)
+  return JSON.stringify(data.response);
 }

@@ -17,7 +17,18 @@ export default function App() {
     setInput('');
     try {
       const respuesta = await enviarMensajeAlBackend(input);
-      setMensajes(ms => [...ms, { rol: 'asistente', texto: respuesta }]);
+      let textoPlano;
+
+      if (respuesta?.data?.result) {
+        // Borra cualquier bloque <think> ... </think> con tolerancia a espacios y case-insensitive
+        textoPlano = respuesta.data.result.replace(/<\s*think\s*>[\s\S]*?<\s*\/\s*think\s*>/gi, '').trim();
+      } else if (typeof respuesta === 'string') {
+        textoPlano = respuesta;
+      } else {
+        textoPlano = JSON.stringify(respuesta);
+      }
+
+      setMensajes(ms => [...ms, { rol: 'asistente', texto: textoPlano }]);
     } catch (err) {
       setError(err.message);
     } finally {
