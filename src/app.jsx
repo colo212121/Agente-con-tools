@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Chat from './chat';
 import { enviarMensajeAlBackend } from './api';
+import './app.css';
 
 export default function App() {
   const [mensajes, setMensajes] = useState([]);
